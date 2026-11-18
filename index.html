@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Spin Fiesta: free-to-play roulette demo</title>
+  <meta name="description" content="A play-money roulette demo with starter coins, daily coins, number bets, a demo coin shop and a prize shop.">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+<div id="app" data-welcome-coins="5" data-daily-coins="2" data-bet-cost="1" data-max-bets="6" data-big-win="6" data-mega-win="30" data-streak-bonus="1" data-streak-cap="3">
+
+  <header class="top">
+    <p class="brand">Spin Fiesta</p>
+    <div class="top-right">
+      <button id="sound" class="sound" type="button" aria-pressed="true" data-on="Sound on" data-off="Sound off">Sound on</button>
+      <p class="balance" id="balance" aria-live="polite"><span id="coins">0</span> coins</p>
+    </div>
+  </header>
+
+  <div class="hero">
+    <h1>
+      <span data-variant="A">Your first <span data-fill="welcome">5</span> coins are on us. Place a bet and spin!</span>
+      <span data-variant="B" hidden>Welcome! <span data-fill="welcome">5</span> starter coins are ready. Pick your lucky number!</span>
+    </h1>
+    <p id="status" class="status" role="status"></p>
+  </div>
+
+  <main class="layout">
+    <section class="stage" aria-label="Roulette wheel">
+      <div class="wheel-wrap" id="wheel-wrap">
+        <div class="bulbs" id="bulbs" aria-hidden="true"></div>
+        <canvas id="wheel" class="rotor" width="640" height="640" role="img" aria-label="Roulette wheel with 37 pockets"></canvas>
+        <div class="orbit" id="orbit" aria-hidden="true"><span class="ball" id="ball"></span></div>
+        <div class="pointer" aria-hidden="true"></div>
+        <button id="spin" class="spin-core" type="button"><span class="spin-word">SPIN</span><span id="spin-sub" class="spin-sub"></span></button>
+        <div id="win-banner" class="win-banner" aria-hidden="true"><span id="win-tier" class="win-tier"></span><span id="win-amount" class="win-amount"></span></div>
+      </div>
+
+      <div class="result" aria-live="polite">
+        <span id="result-ball" class="ball-chip" aria-hidden="true">?</span>
+        <span id="result-text">Place a bet, then hit spin.</span>
+      </div>
+
+      <div class="history-wrap">
+        <p class="history-title">Recent numbers</p>
+        <ol id="history" class="history"></ol>
+      </div>
+    </section>
+
+    <section class="panel">
+      <p id="streak" class="streak" hidden></p>
+
+      <section class="board" aria-labelledby="board-title">
+        <h2 id="board-title">Place your bets</h2>
+        <p class="board-note">Every bet costs <b data-fill="betcost">1</b> coin. Place up to <b data-fill="maxbets">6</b> bets per spin.</p>
+
+        <div class="outside">
+          <button type="button" class="cell color red" data-bet="red" data-label="Red" data-payout="3" aria-pressed="false"><span class="cell-name">Red</span><small>pays <span data-fill="payout-red"></span></small></button>
+          <button type="button" class="cell color black" data-bet="black" data-label="Black" data-payout="3" aria-pressed="false"><span class="cell-name">Black</span><small>pays <span data-fill="payout-black"></span></small></button>
+        </div>
+
+        <p class="numbers-title">Or pick a number. Numbers pay <b data-fill="payout-number"></b> coins.</p>
+        <div class="numbers" data-payout="40">
+          <button type="button" class="cell num zero" data-bet="n0" data-label="0" aria-pressed="false">0</button>
+          <button type="button" class="cell num red" data-bet="n1" data-label="1" aria-pressed="false">1</button>
+          <button type="button" class="cell num black" data-bet="n2" data-label="2" aria-pressed="false">2</button>
+          <button type="button" class="cell num red" data-bet="n3" data-label="3" aria-pressed="false">3</button>
+          <button type="button" class="cell num black" data-bet="n4" data-label="4" aria-pressed="false">4</button>
+          <button type="button" class="cell num red" data-bet="n5" data-label="5" aria-pressed="false">5</button>
+          <button type="button" class="cell num black" data-bet="n6" data-label="6" aria-pressed="false">6</button>
+          <button type="button" class="cell num red" data-bet="n7" data-label="7" aria-pressed="false">7</button>
+          <button type="button" class="cell num black" data-bet="n8" data-label="8" aria-pressed="false">8</button>
+          <button type="button" class="cell num red" data-bet="n9" data-label="9" aria-pressed="false">9</button>
+          <button type="button" class="cell num black" data-bet="n10" data-label="10" aria-pressed="false">10</button>
+          <button type="button" class="cell num black" data-bet="n11" data-label="11" aria-pressed="false">11</button>
+          <button type="button" class="cell num red" data-bet="n12" data-label="12" aria-pressed="false">12</button>
+          <button type="button" class="cell num black" data-bet="n13" data-label="13" aria-pressed="false">13</button>
+          <button type="button" class="cell num red" data-bet="n14" data-label="14" aria-pressed="false">14</button>
+          <button type="button" class="cell num black" data-bet="n15" data-label="15" aria-pressed="false">15</button>
+          <button type="button" class="cell num red" data-bet="n16" data-label="16" aria-pressed="false">16</button>
+          <button type="button" class="cell num black" data-bet="n17" data-label="17" aria-pressed="false">17</button>
+          <button type="button" class="cell num red" data-bet="n18" data-label="18" aria-pressed="false">18</button>
+          <button type="button" class="cell num red" data-bet="n19" data-label="19" aria-pressed="false">19</button>
+          <button type="button" class="cell num black" data-bet="n20" data-label="20" aria-pressed="false">20</button>
+          <button type="button" class="cell num red" data-bet="n21" data-label="21" aria-pressed="false">21</button>
+          <button type="button" class="cell num black" data-bet="n22" data-label="22" aria-pressed="false">22</button>
+          <button type="button" class="cell num red" data-bet="n23" data-label="23" aria-pressed="false">23</button>
+          <button type="button" class="cell num black" data-bet="n24" data-label="24" aria-pressed="false">24</button>
+          <button type="button" class="cell num red" data-bet="n25" data-label="25" aria-pressed="false">25</button>
+          <button type="button" class="cell num black" data-bet="n26" data-label="26" aria-pressed="false">26</button>
+          <button type="button" class="cell num red" data-bet="n27" data-label="27" aria-pressed="false">27</button>
+          <button type="button" class="cell num black" data-bet="n28" data-label="28" aria-pressed="false">28</button>
+          <button type="button" class="cell num black" data-bet="n29" data-label="29" aria-pressed="false">29</button>
+          <button type="button" class="cell num red" data-bet="n30" data-label="30" aria-pressed="false">30</button>
+          <button type="button" class="cell num black" data-bet="n31" data-label="31" aria-pressed="false">31</button>
+          <button type="button" class="cell num red" data-bet="n32" data-label="32" aria-pressed="false">32</button>
+          <button type="button" class="cell num black" data-bet="n33" data-label="33" aria-pressed="false">33</button>
+          <button type="button" class="cell num red" data-bet="n34" data-label="34" aria-pressed="false">34</button>
+          <button type="button" class="cell num black" data-bet="n35" data-label="35" aria-pressed="false">35</button>
+          <button type="button" class="cell num red" data-bet="n36" data-label="36" aria-pressed="false">36</button>
+        </div>
+
+        <p id="bet-summary" class="bet-summary"></p>
+        <button id="clear-bets" class="ghost" type="button">Clear bets</button>
+      </section>
+
+      <div class="actions">
+        <button id="open-buy" class="ghost" type="button">Buy coins</button>
+        <button id="open-redeem" class="ghost" type="button">Redeem coins</button>
+      </div>
+
+      <section class="rules" aria-labelledby="rules-title">
+        <h2 id="rules-title">How coins work</h2>
+        <ul>
+          <li>New players start with <span data-fill="welcome">5</span> coins.</li>
+          <li>Come back on a new day to collect <span data-fill="daily">2</span> more.</li>
+          <li>Every bet costs <span data-fill="betcost">1</span> coin.</li>
+          <li>Red or black pays <span data-fill="payout-red"></span> coins. A number pays <span data-fill="payout-number"></span>.</li>
+          <li>Win again and again to build a streak and earn bonus coins.</li>
+          <li>Buy more coins or redeem coins for prizes at any time.</li>
+        </ul>
+      </section>
+    </section>
+  </main>
+
+  <details class="tools">
+    <summary>Demo tools and event log</summary>
+    <p class="hint">Reviewing this project? Add <code>?variant=B</code> to the address to see the second headline. Use the buttons below to test the daily coins without waiting a day.</p>
+    <div class="actions">
+      <button id="next-day" class="ghost" type="button">Skip to tomorrow</button>
+      <button id="reset" class="ghost" type="button">Reset demo</button>
+    </div>
+    <p class="hint">Every action is also printed to the browser console.</p>
+    <ol id="event-log" class="log"></ol>
+  </details>
+
+  <footer>
+    <p>Spin Fiesta is a portfolio demo. All coins are play money. No payment is taken, nothing is bought with real money, and prizes have no cash value.</p>
+  </footer>
+
+  <canvas id="fx" class="fx" aria-hidden="true"></canvas>
+
+  <dialog id="welcome-dialog" aria-labelledby="welcome-title">
+    <div class="sheet reward">
+      <div class="coin" aria-hidden="true"><span data-fill="welcome">5</span></div>
+      <h2 id="welcome-title">Welcome, new player!</h2>
+      <p>Here are <b><span data-fill="welcome">5</span> coins</b> to start playing.</p>
+      <button id="claim-welcome" class="primary" type="button">Claim <span data-fill="welcome">5</span> coins</button>
+    </div>
+  </dialog>
+
+  <dialog id="daily-dialog" aria-labelledby="daily-title">
+    <div class="sheet reward">
+      <div class="coin" aria-hidden="true"><span data-fill="daily">2</span></div>
+      <h2 id="daily-title">Welcome back!</h2>
+      <p>Here are your <b><span data-fill="daily">2</span> daily coins</b>.</p>
+      <button id="claim-daily" class="primary" type="button">Claim <span data-fill="daily">2</span> coins</button>
+    </div>
+  </dialog>
+
+  <dialog id="empty-dialog" aria-labelledby="empty-title">
+    <div class="sheet reward">
+      <div class="coin empty" aria-hidden="true"><span>0</span></div>
+      <h2 id="empty-title">You've used all your coins</h2>
+      <p>Come back tomorrow for <b><span data-fill="daily">2</span> free coins</b>, or buy more coins here.</p>
+      <button id="empty-buy" class="primary" type="button">Buy coins here</button>
+      <button class="ghost close" type="button">Come back tomorrow</button>
+    </div>
+  </dialog>
+
+  <dialog id="buy-dialog" aria-labelledby="buy-title">
+    <div class="sheet">
+      <h2 id="buy-title">Buy coins</h2>
+      <p class="note">Demo only. No payment is taken and no card details are asked for.</p>
+      <div class="options">
+        <button type="button" class="option pack" data-id="small" data-coins="5" data-price="$0.99"><strong>5 coins</strong><span>$0.99</span></button>
+        <button type="button" class="option pack" data-id="medium" data-coins="15" data-price="$2.49"><strong>15 coins</strong><span>$2.49</span></button>
+        <button type="button" class="option pack" data-id="large" data-coins="40" data-price="$5.99"><strong>40 coins</strong><span>$5.99</span></button>
+      </div>
+      <p id="buy-msg" class="dialog-msg" role="status"></p>
+      <button type="button" class="ghost close">Close</button>
+    </div>
+  </dialog>
+
+  <dialog id="redeem-dialog" aria-labelledby="redeem-title">
+    <div class="sheet">
+      <h2 id="redeem-title">Redeem coins</h2>
+      <p class="note">Swap coins for demo prizes. Prizes have no cash value.</p>
+      <div class="options">
+        <button type="button" class="option prize" data-id="badge" data-cost="10" data-name="Fiesta badge"><strong>Fiesta badge</strong><span>10 coins</span><em class="owned"></em></button>
+        <button type="button" class="option prize" data-id="theme" data-cost="20" data-name="Neon table theme"><strong>Neon table theme</strong><span>20 coins</span><em class="owned"></em></button>
+        <button type="button" class="option prize" data-id="draw" data-cost="30" data-name="Weekend draw entry"><strong>Weekend draw entry</strong><span>30 coins</span><em class="owned"></em></button>
+      </div>
+      <p id="redeem-msg" class="dialog-msg" role="status"></p>
+      <button type="button" class="ghost close">Close</button>
+    </div>
+  </dialog>
+
+  <div id="messages" hidden>
+    <span data-msg="welcome">{coins} starter coins added. Good luck!</span>
+    <span data-msg="daily">{coins} daily coins added. Good luck!</span>
+    <span data-msg="claimed">You already collected today's coins. Come back tomorrow for {coins} more.</span>
+    <span data-msg="pick">Place a bet first. Tap red, black or a number.</span>
+    <span data-msg="tooMany">You can place up to {max} bets per spin.</span>
+    <span data-msg="needCoins">You only have {coins} coins, so that is the most bets you can place.</span>
+    <span data-msg="summaryNone">No bets yet. Tap red, black or a number.</span>
+    <span data-msg="summary">Your bets: {list} ({coins} coins)</span>
+    <span data-msg="subNone">pick a bet</span>
+    <span data-msg="subOne">1 coin</span>
+    <span data-msg="subMany">{n} coins</span>
+    <span data-msg="spinning">No more bets. Spinning...</span>
+    <span data-msg="win">{number} {color}. You won {payout} coins!</span>
+    <span data-msg="lose">{number} {color}. Not this time. Change your bets or spin again.</span>
+    <span data-msg="streak">{streak} wins in a row! Streak bonus: +{bonus} coins.</span>
+    <span data-msg="tierWin">Nice win!</span>
+    <span data-msg="tierBig">BIG WIN!</span>
+    <span data-msg="tierMega">MEGA WIN!!!</span>
+    <span data-msg="bought">{coins} demo coins added. No payment was taken.</span>
+    <span data-msg="redeemed">Redeemed {name} for {cost} coins.</span>
+    <span data-msg="notEnough">You need {cost} coins for {name}. Spin or buy more coins first.</span>
+    <span data-msg="reset">Demo reset. Starting as a brand-new player.</span>
+  </div>
+
+</div>
+</body>
+</html>
