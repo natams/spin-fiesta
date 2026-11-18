@@ -505,6 +505,9 @@ button { font: inherit; }
 
 .primary:active { transform: translateY(3px); box-shadow: 0 2px 0 #ff9f1c; }
 
+button:focus-visible,
+summary:focus-visible { outline: 4px solid #22d3ee; outline-offset: 3px; }
+
 button:disabled { cursor: not-allowed; }
 
 .attention { background: #ffd23f; color: #1a0b4d; }
